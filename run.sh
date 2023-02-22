@@ -1,6 +1,1 @@
-brew upgrade
-brew services run postgresql@15
-uvicorn app.main:app --reload &
-sleep 7200
-pkill -f uvicorn
-brew services stop postgresql@15
+gunicorn -w 1 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
