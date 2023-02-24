@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, conint
 from typing import Optional
+from fastapi.param_functions import Form
 
 
 class BaseUser(BaseModel):
@@ -80,3 +81,21 @@ class TokenData(BaseModel):
 class Vote(BaseModel):
     post_id: int
     dir: conint(le=1, ge=-1)
+
+
+class OAuth2PasswordRequestFormAlternative:
+    def __init__(
+        self,
+        grant_type: str = Form(default=None, regex="password"),
+        email: str = Form(),
+        password: str = Form(),
+        scope: str = Form(default=""),
+        client_id: Optional[str] = Form(default=None),
+        client_secret: Optional[str] = Form(default=None),
+    ):
+        self.grant_type = grant_type
+        self.username = email
+        self.password = password
+        self.scopes = scope.split()
+        self.client_id = client_id
+        self.client_secret = client_secret
